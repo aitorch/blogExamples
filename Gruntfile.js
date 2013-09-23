@@ -1,8 +1,13 @@
 'use strict';
 
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
+var mountFolder = function(folder, mountPoint){
+  mountPoint || (mountPoint = '/');
+  var express = require('express');
+  var app = express();
+  app.use(mountPoint, express.static(folder));
+  app.use(mountPoint, express.directory(folder));
+  return app;
+}
 
 module.exports = function (grunt) {
   // load all grunt tasks
@@ -19,9 +24,13 @@ module.exports = function (grunt) {
 
       server: {
         options: {
-          middleware: function (connect) {
+          middleware: function(connect){
             return [
-              mountFolder(connect, 'docs/out')
+              mountFolder('bower_components', '/components'),
+              mountFolder('docs/out/', '/docs'),
+              mountFolder('docs/src/partials', '/specs/examples'),
+              mountFolder('specs', '/specs'),
+              require('./specs/live_editor_app.js')
             ];
           }
         }
@@ -34,7 +43,7 @@ module.exports = function (grunt) {
 
     docs: {
       srcPath: 'docs/src',
-      outPath: 'docs/out/docs'
+      outPath: 'docs/out'
     },
 
     regarde: {
