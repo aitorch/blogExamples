@@ -1,0 +1,12 @@
+<form data-js="tryit">
+  <div class="source">
+    <textarea class="original"><%= this.partial('examples/' + this.file) %></textarea>
+    <div class="js"></div>
+    <div class="button"><input type="submit" value="Try it out!" /></div>
+  </div>
+  <div class="result">
+    Result:
+    <div class="output"></div>
+    <div class="errors"></div>
+  </div>
+</form>

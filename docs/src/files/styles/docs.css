@@ -1,0 +1,31 @@
+
+.CodeMirror {
+  height: auto;
+}
+
+.CodeMirror-scroll {
+  overflow: auto;
+}
+
+.button {
+  text-align: right;
+}
+
+.source, .result {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.result {
+  display: none;
+  margin-left: 1rem;
+}
+
+.errors {
+  color: red;
+}
+
+iframe {
+  height: auto;
+  width: auto;
+}

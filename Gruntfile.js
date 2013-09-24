@@ -18,22 +18,23 @@ module.exports = function (grunt) {
 
     connect: {
       options: {
-        port: 3000,
-        hostname: '0.0.0.0'
-      },
-
-      server: {
-        options: {
-          middleware: function(connect){
-            return [
-              mountFolder('bower_components', '/components'),
-              mountFolder('docs/out/', '/docs'),
-              mountFolder('docs/src/partials', '/specs/examples'),
-              mountFolder('specs', '/specs'),
-              require('./specs/live_editor_app.js')
-            ];
-          }
+        hostname: '0.0.0.0',
+        middleware: function(connect){
+          return [
+            mountFolder('app', '/app'),
+            mountFolder('bower_components', '/components'),
+            mountFolder('docs/out/', '/docs'),
+            mountFolder('docs/src/partials/examples', '/specs/examples'),
+            mountFolder('specs', '/specs'),
+            require('./specs/live_editor_app.js')
+          ];
         }
+      },
+      server: {
+        options: { port: 3000 }
+      },
+      specs: {
+        options: { port: 8080 }
       }
     },
 
@@ -53,11 +54,20 @@ module.exports = function (grunt) {
         ],
         tasks: ['docs']
       }
+    },
+
+    exec: {
+      phantomSpecs: {
+        cmd: 'phantomjs specs/phantom_spec_runner.js'
+      }
     }
 
   });
 
   grunt.registerTask('server',
-                     ['clean', 'docs', 'connect', 'regarde']);
+                     ['clean', 'docs', 'connect:server', 'regarde']);
+
+  grunt.registerTask('specs',
+                     ['clean', 'connect:specs', 'exec:phantomSpecs']);
 
 };

@@ -4,7 +4,7 @@ Exec {
   path => ['/usr/sbin', '/usr/bin', '/usr/local/bin', '/sbin', '/bin']
 }
 
-# --- Preinstall Stage ---#
+# --- Preinstall Stage --- #
 
 stage { 'preinstall':
   before => Stage['main']
@@ -22,7 +22,7 @@ class { 'apt_get_update':
   stage => preinstall
 }
 
-# --- Packages ---#
+# --- Packages --- #
 
 package { 'git':
   ensure => 'installed'
@@ -30,6 +30,10 @@ package { 'git':
 
 package { 'git-core':
   ensure => installed
+}
+
+package { 'libfontconfig1':
+  ensure => 'installed'
 }
 
 # --- NodeJS --- #
@@ -64,3 +68,8 @@ exec { 'bower_install':
   cwd => "/vagrant",
   require => Package['bower']
 }
+
+# --- PhantomJS --- #
+
+class { 'phantomjs': }
+

@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <title>JSCalc</title>
-  <style>
-    pre {
-      display: inline-block;
-      padding: 0.5rem;
-      margin: 0;
-      border: 1px solid;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css"
+        href="/components/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" type="text/css"
+        href="/components/codemirror/theme/blackboard.css">
+  <link rel="stylesheet" type="text/css" href="styles/docs.css" />
+
+  <script src="/components/jquery/jquery.js"></script>
+  <script src="/components/codemirror/lib/codemirror.js"></script>
+  <script src="/components/codemirror/mode/javascript/javascript.js"></script>
 </head>
 <body>
   <h1>JSCalc</h1>
@@ -18,12 +19,12 @@
 
   <h2>Addition</h2>
   <p>You can add two numbers by using the JSCalc.add() function.</p>
-  <pre><%= this.partial('adding_example') %></pre>
+  <%= this.partial('live_editor', {file: 'adding_example'}) %>
 
   <h2>Substraction</h2>
   <p>You can substract two numbers by using the JSCalc.substract() function.</p>
-  <pre><%= this.partial('substracting_example') %></pre>
+  <%= this.partial('live_editor', {file: 'substracting_example'}) %>
 
-
+  <script src="/specs/live_editor_client.js"></script>
 </body>
 </html>
