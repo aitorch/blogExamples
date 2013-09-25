@@ -1,21 +1,8 @@
 (function() {
 
-  var host = window.location.protocol + '//' + window.location.host;
-  var action= "/specs/liveeditor";
-
   $("form[data-js='tryit'").each(function(){
     toLiveEditor($(this));
   });
-
-  function createIframe(src, $container){
-    var $iframe = $('<iframe></iframe>').attr('src', src);
-    $container.append($iframe);
-    var iframe = window.frames[window.frames.length - 1];
-    iframe.onerror = function(){
-      $container.siblings('.errors').append(this.event.message);
-    }
-    return iframe;
-  }
 
   function toLiveEditor($form){
 
@@ -29,22 +16,32 @@
     $form.find('.original').hide();
 
     $form.on('submit', function(){
-      $.ajax({
-        url: action,
-        type: 'POST',
-        data: {
-          js: editor.getValue()
-        }
-      })
-        .done(function(){
-          var output = $form.find('.output').empty();
-          var iframe = createIframe(action, output);
-          $form.find('.result').css('display', 'inline-block');
-        });
-
+      var output = $form.find('.output').empty();
+      createIframe(output, {js: editor.getValue()});
+      $form.find('.result').css('display', 'inline-block');
       return false;
     });
+  }
 
+  function createIframe($container, options){
+    var $iframe = $('<iframe></iframe>').attr('src', '/specs/template.html');
+    $container.append($iframe);
+
+    var iframe = window.frames[window.frames.length - 1];
+    iframe.onerror = function(){
+      $container.siblings('.errors').append(this.event.message);
+    }
+
+    $iframe.on('load', function(){
+      $body = $iframe.contents().find('body');
+      if(options && options.js){
+        $script = $('<script></script>');
+        $body.append($script);
+        $script.html(options.js);
+      }
+    });
+
+    return $iframe;
   }
 
 })();

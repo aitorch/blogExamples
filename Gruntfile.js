@@ -25,8 +25,7 @@ module.exports = function (grunt) {
             mountFolder('bower_components', '/components'),
             mountFolder('docs/out/', '/docs'),
             mountFolder('docs/src/partials/examples', '/specs/examples'),
-            mountFolder('specs', '/specs'),
-            require('./specs/live_editor_app.js')
+            mountFolder('specs', '/specs')
           ];
         }
       },

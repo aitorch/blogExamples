@@ -7,10 +7,9 @@ var timeoutID;
 
 $.get(specListingURL)
     .done(function(html){
-      var filePaths = $(html)
-                    .find('#files a')
-                    .map(function(){ return $(this).attr('href'); })
-                    .filter(function(){ return this.match(/\.js$/); });
+      var filePaths = $(html).find('#files a')
+                             .map(function(){ return $(this).attr('href'); })
+                             .filter(function(){ return this.match(/\.js$/); });
 
       if(filePaths.length <= 0){
         updateErrorCount("Spec Listing", "No spec files found",
@@ -29,16 +28,28 @@ $.get(specListingURL)
 
 function runInFrame(filePath){
   var fileName = _.last(filePath.split('/'));
-  var src = filePath + ".html";
-  var iframe = createIframe(src, $('body'));
+  var iframe = createIframe($('body'), {jsSrc: filePath});
   iframe.onload = checkIfLoadedCorrectly;
-  iframe.onerror = _.partial(onSpecFail, fileName, src);
+  iframe.onerror = _.partial(onSpecFail, fileName, filePath);
 }
 
-function createIframe(src, $container){
-  var $iframe = $('<iframe></iframe>').attr('src', src).hide();
+function createIframe($container, options){
+  var $iframe = $('<iframe></iframe>').attr('src', '/specs/template.html')
+                                      .hide();
   $container.append($iframe);
-  var iframe = _.last(window.frames);
+
+  var iframe = window.frames[window.frames.length - 1];
+
+  $iframe.on('load', function(){
+    $body = $iframe.contents().find('body');
+    if(options && options.jsSrc){
+      $script = $('<script></script>');
+      $body.append($script);
+      $script.attr('src', options.jsSrc);
+    }
+
+  });
+
   return iframe;
 }
 
